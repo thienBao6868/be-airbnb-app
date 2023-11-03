@@ -45,7 +45,7 @@ class App {
       (
         err: AppError,
         _req: Request,
-        res: Response,
+        _res: Response,
         _next: NextFunction,
       ): void => {
         console.log('ERROR', err);
@@ -56,7 +56,7 @@ class App {
             : HttpCode.INTERNAL_SERVER_ERROR,
           errors: { message: err.message },
           message: err.isOperational ? err.errorType : 'Internal Server Error',
-        }).send(res);
+        }).send(_res);
       },
     );
   }

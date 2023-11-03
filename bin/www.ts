@@ -36,6 +36,8 @@ const server = http.createServer(app);
 server.listen(port, () => console.log('🚀 ~ server launch  ~ port', port));
 server.on('error', onError);
 server.on('listening', onListening);
+// Set server timeout to 30 seconds (for example)
+server.timeout = 30000; // in milliseconds
 
 /**
  * Normalize a port into a number, string, or false.

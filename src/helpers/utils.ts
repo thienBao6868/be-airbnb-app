@@ -15,6 +15,16 @@ export class AppError extends Error {
   }
 }
 
+export class BadRequest extends AppError {
+  constructor(
+    message: string,
+    httpCode = HttpCode.BAD_REQUEST,
+    errorType = ReasonPhrases.BAD_REQUEST,
+  ) {
+    super(message, httpCode, errorType);
+  }
+}
+
 export class NotFound extends AppError {
   constructor(
     message: string,
@@ -24,37 +34,47 @@ export class NotFound extends AppError {
     super(message, httpCode, errorType);
   }
 }
-interface SendResponse{
-    statusCode?: HttpCode;
-    success?:boolean;
-    data?:object | string | number;
-    errors?: string | object; 
-    message?: string
+interface SendResponse {
+  statusCode?: HttpCode;
+  success?: boolean;
+  data?: object | string | number;
+  errors?: string | object;
+  message?: string;
 }
 
-export class SuccessResponse implements SendResponse{
-    statusCode;
-    success;
-    data;
-    errors;
-    message;
-    constructor(
-        props:SendResponse = {
-            statusCode: HttpCode.OK,
-            success:true,
-            data:'oke',
-            errors:undefined,
-            message:'success',
-        }
-    )
-    {
-        this.statusCode = props.statusCode;
-        this.success = props.success;
-        this.data = props.data;
-        this.errors = props.errors;
-        this.message = props.message;
-    }
-    send(res:Response, header = {}){
-        return res.status(this.statusCode || HttpCode.OK).json(this);
-    }
+export class SuccessResponse implements SendResponse {
+  statusCode;
+  success;
+  data;
+  errors;
+  message;
+  constructor(
+    props: SendResponse = {
+      statusCode: HttpCode.OK,
+      success: true,
+      data: 'oke',
+      errors: undefined,
+      message: 'success',
+    },
+  ) {
+    this.statusCode = props.statusCode;
+    this.success = props.success;
+    this.data = props.data;
+    this.errors = props.errors;
+    this.message = props.message;
+  }
+  send(res: Response, header = {}) {
+    return res.status(this.statusCode || HttpCode.OK).json(this);
+  }
+}
+
+export class CreateResponse extends SuccessResponse {
+  constructor({
+    message = 'Oke',
+    data = {},
+    statusCode = HttpCode.CREATED,
+    success = true,
+  }) {
+    super({ message, data, statusCode, success });
+  }
 }
